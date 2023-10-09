@@ -1,0 +1,14 @@
+{
+  "name": "mock",
+  "version": "1.0.0",
+  "description": "## `mock-vanilla` directory This is the codebase for the first part of the gearup. It has a very sparse implementation of our REPL. We'll step through it together to get used to  HTML and CSS, but we will move onto the React project afterwards. To run this, right click on the `index.html` file and click \"Open with Live Server\".",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.38.1",
+    "@types/node": "^20.8.3"
+  }
+}
