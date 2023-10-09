@@ -29,7 +29,7 @@ export default function REPL() {
       component or somewhere else depending on your component organization. What are the pros and cons of each? */}
       {/* CHANGED */}
 
-      <Mode mode={mode} history={history}> </Mode>
+      {/* <Mode mode={mode} history={history}> </Mode> */}
       <hr></hr>
       {/* CHANGED */}
       <REPLInput history={history} setHistory={setHistory} mode={mode} setMode={setMode}/>
