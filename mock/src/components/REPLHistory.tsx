@@ -1,8 +1,6 @@
 import '../styles/main.css';
 
 interface REPLHistoryProps{
-    // TODO: Fill with some shared state tracking all the pushed commands
-    // CHANGED
     history: string[],
     mode: string
 }

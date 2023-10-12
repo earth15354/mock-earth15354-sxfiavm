@@ -11,7 +11,10 @@ export function Mode(props : ModeProps) {
 
     if (props.mode == "Verbose") {
         return (
-            <REPLHistory history ={props.history} mode={props.mode}/>
+            <div className="mode">
+                <REPLHistory history ={props.history} mode={props.mode}/>
+            </div>
+            
         )
     } else {
         return (

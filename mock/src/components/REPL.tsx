@@ -2,6 +2,7 @@ import { useState } from 'react';
 import '../styles/main.css';
 
 import { REPLInput } from './REPLInput';
+import { REPLHistory } from './REPLHistory';
 import { Mode } from './Mode';
 
 /* 
@@ -30,6 +31,7 @@ export default function REPL() {
       {/* CHANGED */}
 
       {/* <Mode mode={mode} history={history}> </Mode> */}
+      <REPLHistory history={history} mode={mode}></REPLHistory>
       <hr></hr>
       {/* CHANGED */}
       <REPLInput history={history} setHistory={setHistory} mode={mode} setMode={setMode}/>

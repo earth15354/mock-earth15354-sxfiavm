@@ -1,6 +1,7 @@
 import '../styles/main.css';
 import { Dispatch, SetStateAction, useState} from 'react';
 import { ControlledInput } from './ControlledInput';
+import hashmap from './mockedJson';
  
 interface REPLInputProps{
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -45,7 +46,7 @@ export function REPLInput(props : REPLInputProps) {
         // item.array.map
         // for every item in the array create a new row
         // so like: 3 nested forloop 
-        // if helper function to produce html in string, then it will display html in text instead of actual values
+        // if helper function to produce html in string, then it will display html in text instead of actual value
 
       } else if (words[0] == "search") {
         // "search <column> <value>"
@@ -54,7 +55,8 @@ export function REPLInput(props : REPLInputProps) {
         
 
       } else if (words[0] == "load_file") {
-
+        const fish = hashmap[words[1]];
+        setLoadedFile(fish);
         // "load csv_filepath"
         // call handler
         // output = handler_call
