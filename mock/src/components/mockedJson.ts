@@ -34,23 +34,25 @@ load_hashmap.set("./data/no_column.csv",
 // HASHMAP FOR SEARCH NO COLUMN
 const search_hashmap_n = new Map<any[],string[][]>();
 
-const map1_n = new Map<string, any>();
-const map2_n = new Map<string, any>();
-map1_n.set("White", [["RI","White","$1,058.47","395773.6521", "$1.00","75%"]]);
-map2_n.set("Red", []);
+// const map1_n = new Map<string, any>();
+// const map2_n = new Map<string, any>();
+// map1_n.set("White", [["RI","White","$1,058.47","395773.6521", "$1.00","75%"]]);
+// map2_n.set("Red", []);
 const val1_n = load_hashmap.get("/Users/earth/Documents/CS 0320/Sprint Projects/csv-earth15354/data/census/dol_ri_earnings_disparity.csv");
 if (val1_n != null) {
     search_hashmap_n.set([val1_n, "White"], [["RI","White","$1,058.47","395773.6521", "$1.00","75%"]])
+    search_hashmap_n.set([val1_n, "Red"], [])
 }
 
 
 // HASHMAP FOR SEARCH YES COLUMN
-const search_hashmap_y = new Map<string[][],Map<string, any>>();
+const search_hashmap_y = new Map<any[],string[][]>();
 
-const map1_y = new Map<string, any>();
-map1_n.set("Data Type, White", ["RI","White","$1,058.47","395773.6521", "$1.00","75%"]);
 const val1_y = load_hashmap.get("/Users/earth/Documents/CS 0320/Sprint Projects/csv-earth15354/data/census/dol_ri_earnings_disparity.csv");
-if (val1_y != null) {search_hashmap_y.set(val1_y, map1_y)}
+if (val1_y != null) {
+    search_hashmap_y.set([val1_y, "Data Type, White"], [["RI","White","$1,058.47","395773.6521", "$1.00","75%"]])
+    search_hashmap_y.set([val1_y, "Data Type, Red"], [])
+}
 
 
 export default mock_hashmap;
