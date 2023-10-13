@@ -8,7 +8,6 @@ import { Search } from "./handlers/search_handle";
 import { search_hashmap_n } from "./mockedJson";
 import { search_hashmap_y } from "./mockedJson";
 
-
 /**
  * REPLInputProps
  * @param history State of history
@@ -67,21 +66,24 @@ export function REPLInput(props: REPLInputProps) {
       if (words[0] == "view") {
         props.setCurrentCommand("view");
 
-        if (words.length != 1){
-          props.setCurrentMessage("Output: Incorrect View Call. Please call 'view' with no aditional arguments");
-          into_history += "Output: Incorrect View Call. Please call 'view' with no aditional arguments";
-        }
-        else {
-        into_history += "Output: ";
-        if (props.loadedFile) {
-          // TODO: how to store table format?
-          // Will output loadedFile in table format
-          into_history += props.loadedFile;
+        if (words.length != 1) {
+          props.setCurrentMessage(
+            "Output: Incorrect View Call. Please call 'view' with no aditional arguments"
+          );
+          into_history +=
+            "Output: Incorrect View Call. Please call 'view' with no aditional arguments";
         } else {
-          props.setCurrentMessage("Output: No data loaded to display.");
-          into_history += "Output: No data loaded to display.";
-        }}
-      // Case where given "search"
+          into_history += "Output: ";
+          if (props.loadedFile) {
+            // TODO: how to store table format?
+            // Will output loadedFile in table format
+            into_history += props.loadedFile;
+          } else {
+            props.setCurrentMessage("Output: No data loaded to display.");
+            into_history += "Output: No data loaded to display.";
+          }
+        }
+        // Case where given "search"
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
         into_history = "Command: " + words[0] + "\n";
@@ -115,7 +117,7 @@ export function REPLInput(props: REPLInputProps) {
             into_history += "Output: " + message + "\n";
           }
         }
-      // Case where given "load"
+        // Case where given "load"
       } else if (words[0] == "load_file") {
         // Get filepath from command string
         if (words.length < 2) {
