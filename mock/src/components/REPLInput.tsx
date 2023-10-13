@@ -82,12 +82,18 @@ export function REPLInput(props: REPLInputProps) {
         } else {
           if (props.loadedFile) {
             const search_result = Search(words[1], words[2], props.loadedFile);
-            into_history += "Output: " + search_result + "\n";
-            props.setCurrentMessage(search_result);
+            if (search_result == undefined) {
+              let message = "Cannot find term you are searching for";
+              props.setCurrentMessage(message);
+              into_history += "Output: " + message + "\n";
+            } else {
+              into_history += "Output: " + search_result.toString() + "\n";
+              props.setCurrentMessage(search_result.toString());
+            }
           } else {
             let message = "No data loaded to search.";
             props.setCurrentMessage(message);
-            into_history += message;
+            into_history += "Output: " + message + "\n";
           }
         }
       // Case where given "load"
@@ -102,16 +108,20 @@ export function REPLInput(props: REPLInputProps) {
           // Get file matching that filepath from mocked data (load the file)
           // Note: this will change once we are actually loading files
           const file_content = Load(filepath);
-          if (file_content == null) {
-            let message = "File at " + filepath + " not found";
-            props.setCurrentMessage(message);
-            into_history += "Output: " + message + "\n";
-          } else {
-            props.setLoadedFile(file_content);
-            let message = "Successfully loaded file at " + filepath;
-            props.setCurrentMessage(message);
-            into_history += "Output: " + message + "\n";
-          }
+          let message = file_content.toString();
+          // console.log(message);
+          props.setCurrentMessage(message);
+          into_history += "Output: " + message + "\n";
+          // if (file_content == null) {
+          //   let message = "File at " + filepath + " not found";
+          //   props.setCurrentMessage(message);
+          //   into_history += "Output: " + message + "\n";
+          // } else {
+          //   props.setLoadedFile(file_content);
+          //   let message = "Successfully loaded file at " + filepath;
+          //   props.setCurrentMessage(message);
+          //   into_history += "Output: " + message + "\n";
+          // }
         }
         props.setCurrentCommand("load_file");
       } else {
