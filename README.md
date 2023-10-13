@@ -5,7 +5,7 @@ Jitpuwapat Mokkamakkul (earth15354)
 
 ## Github Repository
 
-#TODO: Add link to github repository
+https://github.com/earth15354/mock-earth15354-sxfiavn/tree/main
 
 ## Project Description
 
@@ -25,3 +25,6 @@ For this project we created a command line application that allows users to load
 ## How to run the tests
 
 ## Test Coverage Report
+
+## Potential Bugs
+When a file path that was too long was passed into the load 

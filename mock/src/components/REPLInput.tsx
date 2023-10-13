@@ -67,15 +67,20 @@ export function REPLInput(props: REPLInputProps) {
       if (words[0] == "view") {
         props.setCurrentCommand("view");
 
+        if (words.length != 1){
+          props.setCurrentMessage("Output: Incorrect View Call. Please call 'view' with no aditional arguments");
+          into_history += "Output: Incorrect View Call. Please call 'view' with no aditional arguments";
+        }
+        else {
         into_history += "Output: ";
         if (props.loadedFile) {
           // TODO: how to store table format?
           // Will output loadedFile in table format
           into_history += props.loadedFile;
         } else {
-          props.setCurrentMessage("No data loaded to display.");
-          into_history += "No data loaded to display.";
-        }
+          props.setCurrentMessage("Output: No data loaded to display.");
+          into_history += "Output: No data loaded to display.";
+        }}
       // Case where given "search"
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
