@@ -11,7 +11,7 @@ import { CommandHandler } from "./handlers/command_handler";
  */
 interface ModeProps {
   mode: string;
-  history: (string | string[][])[];
+  history: string[][][];
   current: string;
   file: Array<Array<string>>;
   message: string;

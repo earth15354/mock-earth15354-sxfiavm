@@ -9,7 +9,7 @@ import { Mode } from "./Mode";
 {"home/one.csv : [[num, val], [1, 1]]"} */
 
 export default function REPL() {
-  const [history, setHistory] = useState<(string | string[][])[]>([]);
+  const [history, setHistory] = useState<string[][][]>([]);
   const [mode, setMode] = useState<string>("Brief"); // Default == Brief
   const [currentCommand, setCurrentCommand] = useState<string>("");
   const [loadedFile, setLoadedFile] = useState<Array<Array<string>>>([[]]);

@@ -19,8 +19,8 @@ import { Search } from "./handlers/search_handle";
  * @param setCurrentMessage Function to set current message
  */
 interface REPLInputProps {
-  history: (string | string[][])[];
-  setHistory: Dispatch<SetStateAction<(string | string[][])[]>>;
+  history: string[][][];
+  setHistory: Dispatch<SetStateAction<string[][][]>>;
   mode: string;
   setMode: Dispatch<SetStateAction<string>>;
   currentCommand: string;
@@ -29,29 +29,6 @@ interface REPLInputProps {
   setLoadedFile: Dispatch<SetStateAction<Array<Array<string>>>>;
   currentMessage: string;
   setCurrentMessage: Dispatch<SetStateAction<string>>;
-}
-
-/**
- * Function to make a table div
- * @param data Array of Array of strings
- * @returns
- */
-function toTable(data: Array<Array<string>>) {
-  return (
-    <div className="view-table">
-      <table>
-        <tbody>
-          {data.map((row, index) => (
-            <tr>
-              {row.map((col, index) => (
-                <td>{col}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
 }
 
 /**
@@ -87,16 +64,13 @@ export function REPLInput(props: REPLInputProps) {
         if (props.loadedFile) {
           // TODO: how to store table format?
           // Will output loadedFile in table format
-          into_history += toTable(props.loadedFile);
+          into_history += props.loadedFile;
         } else {
           props.setCurrentMessage("No data loaded to display.");
           into_history += "No data loaded to display.";
         }
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
-
-        // TODO: Implement search functionality
-
         if (words.length < 3) {
           let message =
             "Invalid search command. Please enter in the format: search <column> <value>";
@@ -104,8 +78,6 @@ export function REPLInput(props: REPLInputProps) {
           into_history += "Output: " + message + "\n";
         } else {
           if (props.loadedFile) {
-            // "search <column> <value>"
-
             const search_result = Search(words[1], words[2], props.loadedFile);
             into_history += "Output: " + search_result + "\n";
             props.setCurrentMessage(search_result);
@@ -147,7 +119,7 @@ export function REPLInput(props: REPLInputProps) {
         into_history += "Output: " + "invalid command" + "\n";
       }
     }
-    props.setHistory([...props.history, into_history]);
+    props.setHistory([...props.history, [[into_history]]]);
     setCommandString("");
   }
 
