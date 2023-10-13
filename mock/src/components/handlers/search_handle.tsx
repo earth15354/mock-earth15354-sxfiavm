@@ -3,7 +3,7 @@ import { search_hashmap_y } from "../mockedJson";
 
 // TODO: mocked search functionality?
 export function Search(column: string, value: string, data: string[][]) {
-  if (column == null) {
+  if (column == "") {
     return search_hashmap_n[data.toString()][value];
   } else {
     const new_val = column + ", " + value;

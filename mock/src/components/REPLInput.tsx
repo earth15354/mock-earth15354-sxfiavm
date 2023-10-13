@@ -56,6 +56,8 @@ export function REPLInput(props: REPLInputProps) {
       props.setCurrentMessage("No command provided");
       props.setCurrentCommand("");
     } else {
+      // let word = commandString;
+      // word.match(/[^\s"']+|"([^"]*)"|'([^']*)'/)
       const words = commandString.split(" ");
       into_history = "Command: " + words[0] + "\n";
       // Case where given "view"
@@ -74,14 +76,19 @@ export function REPLInput(props: REPLInputProps) {
       // Case where given "search"
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
-        if (words.length < 3) {
+        if (words.length < 2) {
           let message =
             "Invalid search command. Please enter in the format: search <column> <value>";
           props.setCurrentMessage(message);
           into_history += "Output: " + message + "\n";
         } else {
           if (props.loadedFile) {
-            const search_result = Search(words[1], words[2], props.loadedFile);
+            let search_result = null;
+            if (words.length == 2) {
+              search_result = Search("", words[1], props.loadedFile);
+            } else {
+              search_result = Search(words[1], words[2], props.loadedFile);
+            }
             if (search_result == undefined) {
               let message = "Cannot find term you are searching for";
               props.setCurrentMessage(message);
@@ -108,20 +115,16 @@ export function REPLInput(props: REPLInputProps) {
           // Get file matching that filepath from mocked data (load the file)
           // Note: this will change once we are actually loading files
           const file_content = Load(filepath);
-          let message = file_content.toString();
-          // console.log(message);
-          props.setCurrentMessage(message);
-          into_history += "Output: " + message + "\n";
-          // if (file_content == null) {
-          //   let message = "File at " + filepath + " not found";
-          //   props.setCurrentMessage(message);
-          //   into_history += "Output: " + message + "\n";
-          // } else {
-          //   props.setLoadedFile(file_content);
-          //   let message = "Successfully loaded file at " + filepath;
-          //   props.setCurrentMessage(message);
-          //   into_history += "Output: " + message + "\n";
-          // }
+          if (file_content == null) {
+            let message = "File at " + filepath + " not found";
+            props.setCurrentMessage(message);
+            into_history += "Output: " + message + "\n";
+          } else {
+            props.setLoadedFile(file_content);
+            let message = "Successfully loaded file at " + filepath;
+            props.setCurrentMessage(message);
+            into_history += "Output: " + message + "\n";
+          }
         }
         props.setCurrentCommand("load_file");
       } else {
