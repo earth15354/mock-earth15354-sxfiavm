@@ -5,6 +5,9 @@ import { ControlledInput } from "./ControlledInput";
 // import { ViewTable } from "./handlers/view_table";
 import { Load } from "./handlers/load_handle";
 import { Search } from "./handlers/search_handle";
+import { search_hashmap_n } from "./mockedJson";
+import { search_hashmap_y } from "./mockedJson";
+
 
 /**
  * REPLInputProps
@@ -76,6 +79,7 @@ export function REPLInput(props: REPLInputProps) {
       // Case where given "search"
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
+        into_history = "Command: " + words[0] + "\n";
         if (words.length < 2) {
           let message =
             "Invalid search command. Please enter in the format: search <column> <value>";
@@ -89,10 +93,11 @@ export function REPLInput(props: REPLInputProps) {
             } else {
               search_result = Search(words[1], words[2], props.loadedFile);
             }
-            if (search_result == undefined) {
+
+            if (search_result == null) {
               let message = "Cannot find term you are searching for";
-              props.setCurrentMessage(message);
               into_history += "Output: " + message + "\n";
+              props.setCurrentMessage(message);
             } else {
               into_history += "Output: " + search_result.toString() + "\n";
               props.setCurrentMessage(search_result.toString());
