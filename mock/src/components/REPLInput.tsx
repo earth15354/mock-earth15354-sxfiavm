@@ -1,117 +1,190 @@
-import '../styles/main.css';
-import { Dispatch, SetStateAction, useState} from 'react';
-import { ControlledInput } from './ControlledInput';
-import hashmap from './mockedJson';
- 
-interface REPLInputProps{
-  // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
-  // CHANGED
-  history: string[],
-  setHistory: Dispatch<SetStateAction<string[]>>,
-  mode: string,
-  setMode: Dispatch<SetStateAction<string>>
+import "../styles/main.css";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ControlledInput } from "./ControlledInput";
+import mock_hashmap from "./mockedJson";
+import { ViewTable } from "./handlers/view_table";
+import { Search } from "./handlers/search_handle";
+
+/**
+ * REPLInputProps
+ * @param history State of history
+ * @param setHistory Function to set history
+ * @param mode State of mode (Brief or Verbose)
+ * @param setMode Function to set mode
+ * @param currentCommand State of current command (view, search, load_file)
+ * @param setCurrentCommand Function to set current command
+ * @param loadedFile State of loaded file
+ * @param setLoadedFile Function to set loaded file
+ * @param currentMessage State of current message
+ * @param setCurrentMessage Function to set current message
+ */
+interface REPLInputProps {
+  history: (string | string[][])[];
+  setHistory: Dispatch<SetStateAction<(string | string[][])[]>>;
+  mode: string;
+  setMode: Dispatch<SetStateAction<string>>;
+  currentCommand: string;
+  setCurrentCommand: Dispatch<SetStateAction<string>>;
+  loadedFile: Array<Array<string>>;
+  setLoadedFile: Dispatch<SetStateAction<Array<Array<string>>>>;
+  currentMessage: string;
+  setCurrentMessage: Dispatch<SetStateAction<string>>;
 }
-// You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
-// REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
-export function REPLInput(props : REPLInputProps) {
-    // Remember: let React manage state in your webapp. 
-    // Manages the contents of the input box
-    const [commandString, setCommandString] = useState<string>('');
 
-    // TODO: Change to whatever we decide to make mockedJson.ts file with\
-    // Possibly List<List<string>>
-    const [loadedFile, setLoadedFile] = useState<Array<Array<string>>>([[]]);
+/**
+ * Function to make a table div
+ * @param data Array of Array of strings
+ * @returns
+ */
+function toTable(data: Array<Array<string>>) {
+  return (
+    <div className="view-table">
+      <table>
+        <tbody>
+          {data.map((row, index) => (
+            <tr>
+              {row.map((col, index) => (
+                <td>{col}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
-    
-    // Manages the current amount of times the button is clicked
-    //const [count, setCount] = useState<number>(0);
+/**
+ *
+ * @param props REPLInputProps
+ *
+ * @returns div containing the input field, submit button, and mode button
+ */
+export function REPLInput(props: REPLInputProps) {
+  const [commandString, setCommandString] = useState<string>("");
 
-    // Manages mode
-    //const [mode, setMode] = useState<string>('Brief');
-    
-    // This function is triggered when the button is clicked.
+  // This function is triggered when the button is clicked.
+  function handleSubmit(commandString: string) {
+    // 1. Parse the command string to obtain the command and the arguments
+    // 2. Check what command is given
+    // 3. In an if-else statement, call component for that command
+    // 4. Set the history to the history + command string
 
-    function handleSubmit(commandString:string) {
-      const words = commandString.split(' ');
+    let into_history = "Command: \n";
 
-      // parse the command string
-      // check what command is given
-      // In an if-else statement, call component for that command 
-      const into_history = "Command: " + words[0] + "\n";
+    if (commandString.length < 1) {
+      into_history += "Output: No command provided";
+      props.setCurrentMessage("No command provided");
+      props.setCurrentCommand("");
+    } else {
+      const words = commandString.split(" ");
+      into_history = "Command: " + words[0] + "\n";
 
       if (words[0] == "view") {
-        // "view"
-        // call handler
-        // into_history += "Output: " + return from handler
-        // item.array.map
-        // for every item in the array create a new row
-        // so like: 3 nested forloop 
-        // if helper function to produce html in string, then it will display html in text instead of actual value
+        props.setCurrentCommand("view");
 
+        into_history += "Output: ";
+        if (props.loadedFile) {
+          // TODO: how to store table format?
+          // Will output loadedFile in table format
+          into_history += toTable(props.loadedFile);
+        } else {
+          props.setCurrentMessage("No data loaded to display.");
+          into_history += "No data loaded to display.";
+        }
       } else if (words[0] == "search") {
-        // "search <column> <value>"
-        // call handler
-        // into_history += "Output: " + return from handler
-        
+        props.setCurrentCommand("search");
 
+        // TODO: Implement search functionality
+
+        if (words.length < 3) {
+          let message =
+            "Invalid search command. Please enter in the format: search <column> <value>";
+          props.setCurrentMessage(message);
+          into_history += "Output: " + message + "\n";
+        } else {
+          if (props.loadedFile) {
+            // "search <column> <value>"
+
+            const search_result = Search(words[1], words[2], props.loadedFile);
+            into_history += "Output: " + search_result + "\n";
+            props.setCurrentMessage(search_result);
+          } else {
+            let message = "No data loaded to search.";
+            props.setCurrentMessage(message);
+            into_history += message;
+          }
+        }
       } else if (words[0] == "load_file") {
-        const fish = hashmap[words[1]];
-        setLoadedFile(fish);
-        // "load csv_filepath"
-        // call handler
-        // output = handler_call
-        // setLoadedFile(output)
-        // into_history += "Output: " + return from handler
+        // Get filepath from command string
+        if (words.length < 2) {
+          let message = "No filepath provided";
+          props.setCurrentMessage(message);
+          into_history += "Output: " + message + "\n";
+        } else {
+          const filepath = words[1];
 
+          // Get file matching that filepath from mocked data (load the file)
+          // Note: this will change once we are actually loading files
+          if (!(filepath in mock_hashmap)) {
+            let message = "File at " + filepath + " not found";
+            props.setCurrentMessage(message);
+            into_history += "Output: " + message + "\n";
+          } else {
+            const file_content = mock_hashmap[filepath];
+
+            props.setLoadedFile(file_content);
+            let message = "Successfully loaded file at " + filepath;
+            props.setCurrentMessage(message);
+            into_history += "Output: " + message + "\n";
+          }
+        }
+        props.setCurrentCommand("load_file");
       } else {
-
-      }
-      
-      props.setHistory([...props.history, into_history])
-      setCommandString('')
-    }
-
-    function changeMode(mode:string) {
-      if (mode == "Brief") {
-        props.setMode("Verbose")
-      } else {
-        props.setMode("Brief")
+        // Invalid Command
+        props.setCurrentCommand("invalid");
+        props.setCurrentMessage("invalid command");
+        into_history += "Output: " + "invalid command" + "\n";
       }
     }
-
-    /**
-     * We suggest breaking down this component into smaller components, think about the individual pieces 
-     * of the REPL and how they connect to each other...
-     */
-    return (
-        <div className="repl-input">
-
-            {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
-            braces, so that React knows it should be interpreted as TypeScript */}
-            {/* I opted to use this HTML tag; you don't need to. It structures multiple input fields
-            into a single unit, which makes it easier for screenreaders to navigate. */}
-
-            {/* Getting User Input from Command Line */}
-            <fieldset>
-              <legend>Command Line:</legend>
-              <ControlledInput value={commandString} setValue={setCommandString} ariaLabel={"Command input"}/>
-            </fieldset>
-
-            {/* Button to submit command line */}
-            <button onClick={() => handleSubmit(commandString)}>Submit</button>
-
-            {/* User change for mode */}
-            <button onClick={() => changeMode(props.mode)}>Mode: {props.mode}</button>
-
-            {/* When command = load */}
-
-            {/* When command = view */}
-            {/* for handling verbose vs. brief when VIEWING: 
-                if mode == brief:
-                  display one line,
-                else:
-                  display command: body:*/}
-  
-        </div>
-    );
+    props.setHistory([...props.history, into_history]);
+    setCommandString("");
   }
+
+  /**
+   * Function takes current State for mode and changes it to the opposite.
+   *
+   * @param mode current State for mode
+   */
+  function changeMode(mode: string) {
+    if (mode == "Brief") {
+      props.setMode("Verbose");
+    } else {
+      props.setMode("Brief");
+    }
+  }
+
+  /**
+   * We suggest breaking down this component into smaller components, think about the individual pieces
+   * of the REPL and how they connect to each other...
+   */
+  return (
+    <div className="repl-input">
+      {/* Getting User Input from Command Line */}
+      <fieldset>
+        <legend>Command Line:</legend>
+        <ControlledInput
+          value={commandString}
+          setValue={setCommandString}
+          ariaLabel={"Command input"}
+        />
+      </fieldset>
+
+      {/* Button to submit command line */}
+      <button onClick={() => handleSubmit(commandString)}>Submit</button>
+
+      {/* User change for mode */}
+      <button onClick={() => changeMode(props.mode)}>Mode: {props.mode}</button>
+    </div>
+  );
+}
