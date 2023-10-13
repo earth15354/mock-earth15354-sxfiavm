@@ -28,7 +28,7 @@ test("after I click the button, the command input is cleared", async ({
   await page.goto("http://localhost:8000/");
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("Awesome command");
-  await page.getByRole("button").click();
+  await page.getByRole("button", { name: "Submit" }).click();
   await expect(page.getByLabel("Command input")).toHaveValue("");
 });
 
