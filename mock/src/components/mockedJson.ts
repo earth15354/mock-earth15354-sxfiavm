@@ -1,5 +1,5 @@
 // TEST HASHMAP
-const mock_hashmap: { [key: string]: Array<Array<string>> } = {
+export const mock_hashmap: { [key: string]: Array<Array<string>> } = {
   "Fish": [["Fisher"], ["Fishererer"]],
   "SmallTable": [
     ["Small", "Table", "1"],
@@ -12,7 +12,7 @@ const mock_hashmap: { [key: string]: Array<Array<string>> } = {
 };
 
 // HASHMAP FOR LOAD
-const load_hashmap = new Map<string, string[][]>();
+export const load_hashmap = new Map<string, string[][]>();
 
 load_hashmap.set("/Users/earth/Documents/CS 0320/Sprint Projects/csv-earth15354/data/census/dol_ri_earnings_disparity.csv", 
 [["State","Data Type","Average Weekly Earnings","Number of Workers","Earnings Disparity","Employed Percent"],
@@ -32,7 +32,7 @@ load_hashmap.set("./data/no_column.csv",
     ["95", "Jupiter", "Junior"]])
 
 // HASHMAP FOR SEARCH NO COLUMN
-const search_hashmap_n = new Map<any[],string[][]>();
+export const search_hashmap_n = new Map<any[],string[][]>();
 
 // const map1_n = new Map<string, any>();
 // const map2_n = new Map<string, any>();
@@ -46,13 +46,10 @@ if (val1_n != null) {
 
 
 // HASHMAP FOR SEARCH YES COLUMN
-const search_hashmap_y = new Map<any[],string[][]>();
+export const search_hashmap_y = new Map<any[],string[][]>();
 
 const val1_y = load_hashmap.get("/Users/earth/Documents/CS 0320/Sprint Projects/csv-earth15354/data/census/dol_ri_earnings_disparity.csv");
 if (val1_y != null) {
     search_hashmap_y.set([val1_y, "Data Type, White"], [["RI","White","$1,058.47","395773.6521", "$1.00","75%"]])
     search_hashmap_y.set([val1_y, "Data Type, Red"], [])
 }
-
-
-export default mock_hashmap;
