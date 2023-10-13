@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../styles/main.css";
 
 import { REPLInput } from "./REPLInput";
-import { REPLHistory } from "./REPLHistory";
+// import { REPLHistory } from "./REPLHistory";
 import { Mode } from "./Mode";
 
 /* Hashmap<String, Array<Array<String>>>

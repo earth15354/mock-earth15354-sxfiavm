@@ -15,6 +15,7 @@ test.beforeEach(() => {
     // TODO: Is there something we need to do before every test case to avoid repeating code?
   })
 
+// await page.getByLabel("enter command") -> gets objects with those labels
 /**
  * Don't worry about the "async" yet. We'll cover it in more detail
  * for the next sprint. For now, just think about "await" as something 

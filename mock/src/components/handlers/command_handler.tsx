@@ -34,7 +34,7 @@ export function CommandHandler(props: CommandHandlerProps) {
     // return the table view
     return (
       <div className="command-handler">
-        <p> View</p>
+        <p> View: </p>
         <ViewTable data={props.loadedFile} />
       </div>
     );

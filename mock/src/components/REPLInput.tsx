@@ -2,7 +2,8 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import mock_hashmap from "./mockedJson";
-import { ViewTable } from "./handlers/view_table";
+// import { ViewTable } from "./handlers/view_table";
+import { Load } from "./handlers/load_handle";
 import { Search } from "./handlers/search_handle";
 
 /**
@@ -49,6 +50,7 @@ export function REPLInput(props: REPLInputProps) {
 
     let into_history = "Command: \n";
 
+    // Check if empty input
     if (commandString.length < 1) {
       into_history += "Output: No command provided";
       props.setCurrentMessage("No command provided");
@@ -56,7 +58,7 @@ export function REPLInput(props: REPLInputProps) {
     } else {
       const words = commandString.split(" ");
       into_history = "Command: " + words[0] + "\n";
-
+      // Case where given "view"
       if (words[0] == "view") {
         props.setCurrentCommand("view");
 
@@ -69,6 +71,7 @@ export function REPLInput(props: REPLInputProps) {
           props.setCurrentMessage("No data loaded to display.");
           into_history += "No data loaded to display.";
         }
+      // Case where given "search"
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
         if (words.length < 3) {
@@ -87,6 +90,7 @@ export function REPLInput(props: REPLInputProps) {
             into_history += message;
           }
         }
+      // Case where given "load"
       } else if (words[0] == "load_file") {
         // Get filepath from command string
         if (words.length < 2) {
@@ -95,16 +99,14 @@ export function REPLInput(props: REPLInputProps) {
           into_history += "Output: " + message + "\n";
         } else {
           const filepath = words[1];
-
           // Get file matching that filepath from mocked data (load the file)
           // Note: this will change once we are actually loading files
-          if (!(filepath in mock_hashmap)) {
+          const file_content = Load(filepath);
+          if (file_content == null) {
             let message = "File at " + filepath + " not found";
             props.setCurrentMessage(message);
             into_history += "Output: " + message + "\n";
           } else {
-            const file_content = mock_hashmap[filepath];
-
             props.setLoadedFile(file_content);
             let message = "Successfully loaded file at " + filepath;
             props.setCurrentMessage(message);
