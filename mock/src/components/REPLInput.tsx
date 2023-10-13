@@ -1,7 +1,7 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import mock_hashmap from "./mockedJson";
+// import mock_hashmap from "./mockedJson";
 // import { ViewTable } from "./handlers/view_table";
 import { Load } from "./handlers/load_handle";
 import { Search } from "./handlers/search_handle";
