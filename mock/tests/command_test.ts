@@ -280,7 +280,7 @@ test("Mode/Verbose Switching", async ({ page }) => {
   await page.getByRole("button", { name: "Submit" }).click();
   await expect(page.getByText("[[one]]").first()).toBeVisible();
 
-  // Switch to verbose
+  // Switch to verbose -> can still access loaded file
   await page.getByRole("button", { name: "Mode: Brief" }).click();
 
   // View
@@ -296,5 +296,15 @@ test("Mode/Verbose Switching", async ({ page }) => {
   await expect(page.getByText("[[one]]").first()).toBeVisible();
 
   // Switch brief
-  // load
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file ./data/empty.csv");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  // Search
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search column no"); //empty CSV
+  await page.getByRole("button", { name: "Submit" }).click();
+  await expect(
+    page.getByText("Output: Cannot find term you are searching for").first()
+  ).toBeVisible();
 });
