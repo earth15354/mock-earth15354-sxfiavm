@@ -80,7 +80,7 @@ export function REPLInput(props: REPLInputProps) {
       } else if (words[0] == "search") {
         props.setCurrentCommand("search");
         into_history = "Command: " + words[0] + "\n";
-        if (words.length < 2) {
+        if (words.length < 2 || words.length > 3) {
           let message =
             "Invalid search command. Please enter in the format: search <column> <value>";
           props.setCurrentMessage(message);
@@ -89,6 +89,8 @@ export function REPLInput(props: REPLInputProps) {
           if (props.loadedFile) {
             let search_result = null;
             if (words.length == 2) {
+              // let file = props.loadedFile.toString();
+              // search_result = search_hashmap_n[file][words[1]];
               search_result = Search("", words[1], props.loadedFile);
             } else {
               search_result = Search(words[1], words[2], props.loadedFile);
